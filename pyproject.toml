@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mlx-whisper-batch"
+version = "0.1.0"
+description = "Overnight batch transcription of dictation archives on Apple Silicon with mlx-whisper"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "Raphael Kirchner" }]
+keywords = ["whisper", "mlx", "transcription", "batch", "dictation", "apple-silicon"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: MacOS X",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = [
+  "mlx-whisper>=0.4.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+whisper-batch = "mlx_whisper_batch.cli:main"
+whisper-fix-output-names = "mlx_whisper_batch.fix_cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mlx_whisper_batch"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+  "/README.md",
+  "/LICENSE",
+  "/whisper-batch.example.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

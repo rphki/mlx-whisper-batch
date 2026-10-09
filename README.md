@@ -1,0 +1,145 @@
+# mlx-whisper-batch
+
+Overnight **batch transcription** of dictation archives on **Apple Silicon** using [mlx-whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper).
+
+Built for folders full of Olympus / Philips / phone recordings: run it overnight, get sibling `.json` + `.txt` next to each audio file. Repeat-loop hallucinations are detected **during** transcription (not after 30 minutes of garbage) and retried with safer settings.
+
+> **macOS Apple Silicon only.** This tool depends on MLX. It is not for Linux, Windows, or Intel Macs without MLX support.
+
+CLI name: `whisper-batch` (short). Package / repo name: `mlx-whisper-batch`.
+
+Contributors: see [README_Developer.md](README_Developer.md).
+
+## Requirements
+
+- Apple Silicon Mac (M1 or newer)
+- [Homebrew](https://brew.sh/)
+- `ffmpeg` (includes `ffprobe`)
+- Python 3.11+
+- [pipx](https://pipx.pypa.io/) (recommended for the CLI) or a venv
+
+## Install ffmpeg
+
+```bash
+brew install ffmpeg
+ffprobe -version
+```
+
+## Install whisper-batch
+
+**No PyPI upload required.** GitHub (or a local clone) is enough.
+
+```bash
+brew install pipx
+pipx ensurepath   # then open a new terminal if needed
+
+git clone https://github.com/<you>/mlx-whisper-batch.git
+cd mlx-whisper-batch
+pipx install .
+```
+
+Or without cloning first:
+
+```bash
+pipx install git+https://github.com/<you>/mlx-whisper-batch.git
+```
+
+After that, `whisper-batch` is on your PATH (`~/.local/bin`). No copying into `/usr/local/bin`.
+
+Update after `git pull`:
+
+```bash
+cd mlx-whisper-batch
+pipx reinstall .
+```
+
+## Configuration
+
+Copy the example and edit:
+
+```bash
+cp whisper-batch.example.toml whisper-batch.toml
+# or (user-wide, under vendor dir):
+mkdir -p ~/.rphki
+cp whisper-batch.example.toml ~/.rphki/whisper-batch.toml
+```
+
+Search order: `--config PATH` → `./whisper-batch.toml` → `~/.rphki/whisper-batch.toml`.
+
+CLI flags override the file. Important keys:
+
+| Key | Role |
+|-----|------|
+| `model` | Hugging Face / local mlx-whisper model |
+| `language` | e.g. `"de"`; empty / omit = auto-detect |
+| `verbose` | `true` = print live transcript segments; default quiet |
+| `monitor_chunk_secs` | Window size for early loop checks (default 90) |
+| `loop_max_consecutive` | Abort if the same line repeats this many times in a row |
+| `max_attempts` | 1 = first settings only; 2 = retry with `condition_on_previous_text_retry` |
+| `condition_on_previous_text_first` / `_retry` | Defaults: `true` / `false` |
+
+First run downloads the model from Hugging Face (can take a while and needs network).
+
+## Usage
+
+```bash
+whisper-batch /path/to/dictation-archive
+whisper-batch /path/to/archive --dry-run
+whisper-batch /path/to/archive --recursive
+whisper-batch /path/to/archive --force
+whisper-batch /path/to/archive -m mlx-community/whisper-large-v3-mlx -l de
+whisper-batch /path/to/archive -v   # live transcript segments
+```
+
+Overnight tip (prevent sleep):
+
+```bash
+caffeinate -i whisper-batch /path/to/archive --recursive
+```
+
+Also check **System Settings → Energy** so the Mac does not sleep mid-batch.
+
+### Timing log
+
+Each file appends a line to `<DIR>/whisper-batch.log`:
+
+```text
+<path> <audio m:ss> <whisper m:ss> <realtime-factor> [attempt=N]
+```
+
+`factor` is whisper_seconds / audio_seconds (one decimal). Retries add `attempt=N`.
+
+### Output files
+
+For `interview.m4a`:
+
+- `interview.json` — full mlx-whisper result (segments, etc.)
+- `interview.txt` — one stripped segment per line
+
+If mlx ever writes a truncated basename, `whisper-batch` renames it. You can also fix a folder later:
+
+```bash
+whisper-fix-output-names /path/to/folder
+whisper-fix-output-names /path/to/folder --dry-run
+```
+
+## Repeat-loop detection
+
+Whisper can get stuck repeating the same line. This tool:
+
+1. Transcribes in time chunks (`monitor_chunk_secs`)
+2. After each chunk, checks for consecutive identical segment lines (and optional dominance of one line)
+3. Aborts the rest of the file early
+4. Retries with `condition_on_previous_text=false` (default)
+
+Abort latency is about one chunk of Whisper time — not the full recording length.
+
+## Supported formats
+
+Common ffmpeg-backed types: `wav`, `mp3`, `m4a`, `aac`, `flac`, `ogg`, `opus`, `wma`, `aiff`, `caf`, `amr`, `3gp`, `3ga`, plus common video containers.
+
+**Olympus DSS / DS2** often need conversion first (vendor tools or a specially built ffmpeg). Convert to WAV/M4A before batching.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
