@@ -159,8 +159,8 @@ Proprietary dictation formats (e.g. DSS/DS2) often need conversion first (vendor
 
 ## Author
 
-Raphael Kirchner — [customwebcode.com](https://customwebcode.com)
+Raphael Kirchner [customwebcode.com](https://customwebcode.com)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).
