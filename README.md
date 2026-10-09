@@ -157,6 +157,10 @@ Common ffmpeg-backed types: `wav`, `mp3`, `m4a`, `aac`, `flac`, `ogg`, `opus`, `
 
 Proprietary dictation formats (e.g. DSS/DS2) often need conversion first (vendor tools or a specially built ffmpeg). Convert to WAV/M4A before batching.
 
+## Author
+
+Raphael Kirchner — [customwebcode.com](https://customwebcode.com)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
