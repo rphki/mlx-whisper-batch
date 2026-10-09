@@ -2,7 +2,9 @@
 
 **Batch transcription** of dictation archives on **Apple Silicon** using [mlx-whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper).
 
-Built for folders full of Olympus / Philips / phone recordings: run it overnight, get sibling `.json` + `.txt` next to each audio file. Repeat-loop hallucinations are detected **during** transcription (not after 30 minutes of garbage) and retried with safer settings.
+Built for folders with of MP3, AAC, WAV, 3GA, ... voice recordings from **digital voice recorders** or **phones**: run it overnight, get `.json` + `.txt` next to each audio file. 
+
+Repeat-loop hallucinations are detected **during** transcription (not after 30 minutes of garbage) and retried with safer settings.
 
 > **macOS Apple Silicon only.** This tool depends on MLX. It is not for Linux, Windows, or Intel Macs without MLX support.
 
@@ -148,7 +150,7 @@ Abort latency is about one chunk of Whisper time — not the full recording leng
 
 Common ffmpeg-backed types: `wav`, `mp3`, `m4a`, `aac`, `flac`, `ogg`, `opus`, `wma`, `aiff`, `caf`, `amr`, `3gp`, `3ga`, plus common video containers.
 
-**Olympus DSS / DS2** often need conversion first (vendor tools or a specially built ffmpeg). Convert to WAV/M4A before batching.
+Proprietary dictation formats (e.g. DSS/DS2) often need conversion first (vendor tools or a specially built ffmpeg). Convert to WAV/M4A before batching.
 
 ## License
 
