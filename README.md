@@ -1,6 +1,6 @@
 # mlx-whisper-batch
 
-Overnight **batch transcription** of dictation archives on **Apple Silicon** using [mlx-whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper).
+**Batch transcription** of dictation archives on **Apple Silicon** using [mlx-whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper).
 
 Built for folders full of Olympus / Philips / phone recordings: run it overnight, get sibling `.json` + `.txt` next to each audio file. Repeat-loop hallucinations are detected **during** transcription (not after 30 minutes of garbage) and retried with safer settings.
 
@@ -14,16 +14,21 @@ Contributors: see [README_Developer.md](README_Developer.md).
 
 - Apple Silicon Mac (M1 or newer)
 - [Homebrew](https://brew.sh/)
-- `ffmpeg` (includes `ffprobe`)
 - Python 3.11+
+- `ffmpeg` (includes `ffprobe`)
 - [pipx](https://pipx.pypa.io/) (recommended for the CLI) or a venv
 
-## Install ffmpeg
+No prior Hugging Face account, Whisper install, or MLX setup is required. On a clean machine, the steps below are enough.
+
+## Install Python and ffmpeg
 
 ```bash
-brew install ffmpeg
+brew install python@3.12 ffmpeg
+python3 --version   # expect 3.11+
 ffprobe -version
 ```
+
+If `python3` is still older than 3.11, use Homebrew’s binary explicitly (e.g. `/opt/homebrew/bin/python3.12`) when creating a venv, or ensure that `python3` points at 3.12.
 
 ## Install whisper-batch
 
@@ -44,14 +49,21 @@ Or without cloning first:
 pipx install git+https://github.com/<you>/mlx-whisper-batch.git
 ```
 
-After that, `whisper-batch` is on your PATH (`~/.local/bin`). No copying into `/usr/local/bin`.
+`pipx install` pulls in `mlx-whisper` and its dependencies (MLX, PyTorch, …) into an isolated environment. After that, `whisper-batch` is on your PATH (`~/.local/bin`). No copying into `/usr/local/bin`.
 
-Update after `git pull`:
+Update after `git pull` (pipx environment name = package name, not `.` and not the CLI name):
 
 ```bash
-cd mlx-whisper-batch
-pipx reinstall .
+pipx reinstall mlx-whisper-batch
 ```
+
+Or from the repo root: `pipx install . --force`.
+
+## First run: model download
+
+The first transcription downloads the default Whisper model from Hugging Face (`mlx-community/whisper-large-v3-mlx`) into `~/.cache/huggingface`. That needs network, roughly **~3 GB** of disk, and can take several minutes depending on your connection. Later runs reuse the cache.
+
+No Hugging Face login or API token is required for the default (public) model — mlx-whisper fetches it automatically.
 
 ## Configuration
 
@@ -77,8 +89,6 @@ CLI flags override the file. Important keys:
 | `loop_max_consecutive` | Abort if the same line repeats this many times in a row |
 | `max_attempts` | 1 = first settings only; 2 = retry with `condition_on_previous_text_retry` |
 | `condition_on_previous_text_first` / `_retry` | Defaults: `true` / `false` |
-
-First run downloads the model from Hugging Face (can take a while and needs network).
 
 ## Usage
 

@@ -9,3 +9,4 @@ build/
 whisper-batch.toml
 *.log
 .DS_Store
+/.cursor/

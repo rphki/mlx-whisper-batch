@@ -29,7 +29,7 @@ deactivate
 # overnight still uses pipx until you promote:
 whisper-batch /path/to/archive
 # when happy:
-pipx reinstall .
+pipx reinstall mlx-whisper-batch
 ```
 
 With the venv activated, its `bin/` wins over `~/.local/bin`. Check with `which whisper-batch` if unsure.
@@ -86,9 +86,9 @@ When the editable tree looks good for overnight use:
 
 ```bash
 deactivate   # optional; pipx does not need the venv
-cd mlx-whisper-batch
-pipx reinstall .
+pipx reinstall mlx-whisper-batch
+# or from the repo root: pipx install . --force
 which whisper-batch   # expect ~/.local/bin/whisper-batch
 ```
 
-That freezes the current tree into pipx again. Further edits stay in the venv until the next `pipx reinstall .`.
+That freezes the current tree into pipx again (`reinstall` uses the package/environment name `mlx-whisper-batch`, not `.` or the CLI name). Further edits stay in the venv until the next reinstall.
