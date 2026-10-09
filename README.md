@@ -12,6 +12,11 @@ CLI name: `whisper-batch` (short). Package / repo name: `mlx-whisper-batch`.
 
 Contributors: see [README_Developer.md](README_Developer.md).
 
+Background and motivation (why this exists, local-only, overnight batching) on my website [aporeo.com](https://aporeo.com):
+
+- [English](https://aporeo.com/en/articles/mlx-whisper-batch)
+- [Deutsch](https://aporeo.com/de/articles/mlx-whisper-batch)
+
 ## Requirements
 
 - Apple Silicon Mac (M1 or newer)
