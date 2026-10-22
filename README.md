@@ -77,8 +77,9 @@ No Hugging Face login or API token is required for the default (public) model �
 Copy the example and edit:
 
 ```bash
+# to the audio file directory (for dir specific language setting etc.)
 cp whisper-batch.example.toml whisper-batch.toml
-# or (user-wide, under vendor dir):
+# or to vendor dir (global = user-wide):
 mkdir -p ~/.rphki
 cp whisper-batch.example.toml ~/.rphki/whisper-batch.toml
 ```
@@ -87,15 +88,15 @@ Search order: `--config PATH` → `./whisper-batch.toml` → `~/.rphki/whisper-b
 
 CLI flags override the file. Important keys:
 
-| Key | Role |
-|-----|------|
-| `model` | Hugging Face / local mlx-whisper model |
-| `language` | e.g. `"de"`; empty / omit = auto-detect |
-| `verbose` | `true` = print live transcript segments; default quiet |
-| `monitor_chunk_secs` | Window size for early loop checks (default 90) |
-| `loop_max_consecutive` | Abort if the same line repeats this many times in a row |
+| Key | Role                                                                       |
+|-----|----------------------------------------------------------------------------|
+| `model` | Hugging Face / local mlx-whisper model                                     |
+| `language` | e.g. `"de"`; empty / omit = auto-detect                                    |
+| `verbose` | `true` = print live transcript segments; default true                      |
+| `monitor_chunk_secs` | Window size for early loop checks (default 90)                             |
+| `loop_max_consecutive` | Abort if the same line repeats this many times in a row                    |
 | `max_attempts` | 1 = first settings only; 2 = retry with `condition_on_previous_text_retry` |
-| `condition_on_previous_text_first` / `_retry` | Defaults: `true` / `false` |
+| `condition_on_previous_text_first` / `_retry` | Defaults: `true` / `false`                                                 |
 
 ## Usage
 
