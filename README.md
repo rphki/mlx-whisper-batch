@@ -45,7 +45,7 @@ If `python3` is still older than 3.11, use Homebrew’s binary explicitly (e.g. 
 brew install pipx
 pipx ensurepath   # then open a new terminal if needed
 
-git clone https://github.com/<you>/mlx-whisper-batch.git
+git clone https://github.com/rphki/mlx-whisper-batch.git
 cd mlx-whisper-batch
 pipx install .
 ```
@@ -53,7 +53,7 @@ pipx install .
 Or without cloning first:
 
 ```bash
-pipx install git+https://github.com/<you>/mlx-whisper-batch.git
+pipx install git+https://github.com/rphki/mlx-whisper-batch.git
 ```
 
 `pipx install` pulls in `mlx-whisper` and its dependencies (MLX, PyTorch, …) into an isolated environment. After that, `whisper-batch` is on your PATH (`~/.local/bin`). No copying into `/usr/local/bin`.
